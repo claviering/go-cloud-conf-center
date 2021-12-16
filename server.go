@@ -24,7 +24,7 @@ func main() {
 	pmDeptRouterGroup := r.Group("/pmDept")
 	router.Org(pmDeptRouterGroup, db)
 
-	userRouterGroup := r.Group("/user")
+	userRouterGroup := r.Group("/pmUser")
 	router.UsersRouter(userRouterGroup, db)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "http://localhost:8080")
 }

@@ -3,43 +3,43 @@ package router
 import (
 	"database/sql"
 	"main/controller"
-	"main/utils"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func UsersRouter(r *gin.RouterGroup, db *sql.DB) {
-	r.POST("/query", func(c *gin.Context) {
+	r.POST("/save", func(c *gin.Context) {
 		type Request struct {
-			PAGE_SIZE int    `json:"pageSize" `
-			USERNAME  string `json:"username"`
+			DeptId   int    `json:"deptId" binding:"required"`
+			Email    string `json:"email" binding:"required"`
+			Mobile   string `json:"mobile" binding:"required"`
+			Nickname string `json:"nickname" binding:"required"`
+			UserName string `json:"userName"`
 		}
 		var req Request
 		c.BindJSON(&req)
-		res, err := db.Exec("SELECT * FROM org_user")
-		utils.CheckErr(err)
+		controller.SaveUser(db, req.DeptId, req.Email, req.Mobile, req.Nickname, req.UserName)
 		c.JSON(200, gin.H{
-			"message": res,
+			"data":    "ok",
+			"code":    200,
+			"msg":     "success",
+			"success": true,
 		})
 	})
-	r.POST("/add", func(c *gin.Context) {
-		type Request struct {
-			USERID   string `json:"userid" binding:"required"`
-			MOBILE   string `json:"mobile" binding:"required"`
-			USERNAME string `json:"username" binding:"required"`
-			ORG_CODE string `json:"orgCode" binding:"required"`
-		}
-		var req Request
-		c.BindJSON(&req)
-		sort := controller.GetUserMaxSort(db) + 1
-		// 时间戳
-		timeStamp := time.Now().Unix()
-		res, err := db.Exec("INSERT INTO org_user(userid,username,orgCode,mobile,createtime,sort) VALUES (?,?,?,?,?,?)", req.USERID, req.USERNAME, req.ORG_CODE, req.MOBILE, timeStamp, sort)
-		utils.CheckErr(err)
+	r.GET("/list/:pageNum/:pageSize", func(c *gin.Context) {
+		pageNum := c.Param("pageNum")
+		pageSize := c.Param("pageSize")
+		email := c.Query("email")
+		res, total := controller.List(db, email, pageNum, pageSize)
 		c.JSON(200, gin.H{
-			"message": res,
+			"data": gin.H{
+				"data":  res,
+				"total": total,
+			},
+			"code":    200,
+			"msg":     "success",
+			"success": true,
 		})
 	})
 }
