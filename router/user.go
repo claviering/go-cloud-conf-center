@@ -11,6 +11,15 @@ import (
 )
 
 func UsersRouter(r *gin.Engine, db *sql.DB) {
+	r.POST("/permission/user/login", func(c *gin.Context) {
+		type Request struct {
+			USERNAME string `json:"username"`
+		}
+		res := Request{USERNAME: "1234"}
+		c.JSON(200, gin.H{
+			"data": res,
+		})
+	})
 	r.POST("/user/query", func(c *gin.Context) {
 		type Request struct {
 			PAGE_SIZE int    `json:"pageSize" `
