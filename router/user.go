@@ -10,17 +10,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func UsersRouter(r *gin.Engine, db *sql.DB) {
-	r.POST("/permission/user/login", func(c *gin.Context) {
-		type Request struct {
-			USERNAME string `json:"username"`
-		}
-		res := Request{USERNAME: "1234"}
-		c.JSON(200, gin.H{
-			"data": res,
-		})
-	})
-	r.POST("/user/query", func(c *gin.Context) {
+func UsersRouter(r *gin.RouterGroup, db *sql.DB) {
+	r.POST("/query", func(c *gin.Context) {
 		type Request struct {
 			PAGE_SIZE int    `json:"pageSize" `
 			USERNAME  string `json:"username"`
@@ -33,7 +24,7 @@ func UsersRouter(r *gin.Engine, db *sql.DB) {
 			"message": res,
 		})
 	})
-	r.POST("/user/add", func(c *gin.Context) {
+	r.POST("/add", func(c *gin.Context) {
 		type Request struct {
 			USERID   string `json:"userid" binding:"required"`
 			MOBILE   string `json:"mobile" binding:"required"`

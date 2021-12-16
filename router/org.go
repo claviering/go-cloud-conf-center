@@ -8,8 +8,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func Org(r *gin.Engine, db *sql.DB) {
-	r.GET("/pmDept/orgTree", func(c *gin.Context) {
+func Org(r *gin.RouterGroup, db *sql.DB) {
+	r.GET("/orgTree", func(c *gin.Context) {
 		res := controller.GetOrganizations(db)
 		c.JSON(200, gin.H{
 			"data":    res,
@@ -18,7 +18,7 @@ func Org(r *gin.Engine, db *sql.DB) {
 			"success": true,
 		})
 	})
-	r.POST("/pmDept/save", func(c *gin.Context) {
+	r.POST("/save", func(c *gin.Context) {
 		type Request struct {
 			DeptName     string `json:"deptName"`
 			ParentDeptId int    `json:"parentDeptId"`
@@ -33,7 +33,7 @@ func Org(r *gin.Engine, db *sql.DB) {
 			"success": true,
 		})
 	})
-	r.POST("/pmDept/deleteDept", func(c *gin.Context) {
+	r.POST("/deleteDept", func(c *gin.Context) {
 		type Request struct {
 			Id int `json:"id" binding:"required"`
 		}
@@ -47,7 +47,7 @@ func Org(r *gin.Engine, db *sql.DB) {
 			"success": true,
 		})
 	})
-	r.POST("/pmDept/updateDept", func(c *gin.Context) {
+	r.POST("/updateDept", func(c *gin.Context) {
 		type Request struct {
 			Id            int    `json:"id"`
 			DeptName      string `json:"deptName"`
@@ -64,7 +64,7 @@ func Org(r *gin.Engine, db *sql.DB) {
 			"success": true,
 		})
 	})
-	r.POST("/pmDept/updateList", func(c *gin.Context) {
+	r.POST("/updateList", func(c *gin.Context) {
 		type Request struct {
 			Id      int `json:"id" binding:"required"`
 			OrderNo int `json:"orderNo" binding:"required"`
@@ -81,7 +81,7 @@ func Org(r *gin.Engine, db *sql.DB) {
 			"success": true,
 		})
 	})
-	r.POST("/pmDept/moveDept", func(c *gin.Context) {
+	r.POST("/moveDept", func(c *gin.Context) {
 		type Request struct {
 			ID            int `json:"id" binding:"required"`
 			GroupParentId int `json:"groupParentId" binding:"required"`

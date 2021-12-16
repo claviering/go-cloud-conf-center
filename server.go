@@ -21,7 +21,10 @@ func main() {
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "I'm a cook server.")
 	})
-	router.UsersRouter(r, db)
-	router.Org(r, db)
+	pmDeptRouterGroup := r.Group("/pmDept")
+	router.Org(pmDeptRouterGroup, db)
+
+	userRouterGroup := r.Group("/user")
+	router.UsersRouter(userRouterGroup, db)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "http://localhost:8080")
 }
