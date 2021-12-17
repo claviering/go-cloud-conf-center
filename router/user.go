@@ -8,6 +8,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// /pmUser
 func UsersRouter(r *gin.RouterGroup, db *sql.DB) {
 	r.POST("/save", func(c *gin.Context) {
 		type Request struct {
@@ -31,12 +32,64 @@ func UsersRouter(r *gin.RouterGroup, db *sql.DB) {
 		pageNum := c.Param("pageNum")
 		pageSize := c.Param("pageSize")
 		email := c.Query("email")
-		res, total := controller.List(db, email, pageNum, pageSize)
+		deptId := c.Query("deptId")
+		res, total := controller.List(db, email, deptId, pageNum, pageSize)
 		c.JSON(200, gin.H{
 			"data": gin.H{
 				"data":  res,
 				"total": total,
 			},
+			"code":    200,
+			"msg":     "success",
+			"success": true,
+		})
+	})
+	r.POST("/resetPassword/:userId", func(c *gin.Context) {
+		userId := c.Param("userId")
+		controller.ResetPassword(db, userId)
+		c.JSON(200, gin.H{
+			"data":    "ok",
+			"code":    200,
+			"msg":     "success",
+			"success": true,
+		})
+	})
+	r.POST("/delete/:id", func(c *gin.Context) {
+		userId := c.Param("id")
+		controller.ResetPassword(db, userId)
+		c.JSON(200, gin.H{
+			"data":    "ok",
+			"code":    200,
+			"msg":     "success",
+			"success": true,
+		})
+	})
+	r.POST("/disableUser/:id", func(c *gin.Context) {
+		userId := c.Param("id")
+		controller.DisableUser(db, userId)
+		c.JSON(200, gin.H{
+			"data":    "ok",
+			"code":    200,
+			"msg":     "success",
+			"success": true,
+		})
+	})
+	r.POST("/enableUser/:id", func(c *gin.Context) {
+		userId := c.Param("id")
+		controller.EnableUser(db, userId)
+		c.JSON(200, gin.H{
+			"data":    "ok",
+			"code":    200,
+			"msg":     "success",
+			"success": true,
+		})
+	})
+	r.POST("/updateUser", func(c *gin.Context) {
+		var req []controller.UpdateUserList
+		c.BindJSON(&req)
+		controller.UpdateUser(db, req)
+		c.JSON(200, gin.H{
+			"data":    "ok",
 			"code":    200,
 			"msg":     "success",
 			"success": true,
