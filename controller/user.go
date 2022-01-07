@@ -11,12 +11,16 @@ import (
 )
 
 type User struct {
-	Id         int    `json:"id"`
-	Mobile     string `json:"mobile"`
-	Nickname   string `json:"nickname"`
-	CreateTime int64  `json:"createTime"`
-	UserName   string `json:"userName"`
-	Email      string `json:"email"`
+	Id            int    `json:"id"`
+	Mobile        string `json:"mobile"`
+	Nickname      string `json:"nickname"`
+	CreateTime    int64  `json:"createTime"`
+	UserName      string `json:"userName"`
+	Email         string `json:"email"`
+	GroupName     string `json:"groupName"`
+	MainGroupName string `json:"mainGroupName"`
+	DeptId        int    `json:"deptId"`
+	OrderNo       int    `json:"orderNo"`
 }
 
 func getUserMaxSort(db *sql.DB) int {
@@ -82,12 +86,16 @@ func List(db *sql.DB, email string, deptId string, pageNum string, pageSize stri
 		err = rows.Scan(&id, &mobile, &nickname, &createTime, &userName, &email)
 		utils.CheckErr(err)
 		user = append(user, User{
-			Id:         id,
-			Mobile:     mobile,
-			Nickname:   nickname,
-			CreateTime: createTime,
-			UserName:   userName,
-			Email:      email,
+			Id:            id,
+			Mobile:        mobile,
+			Nickname:      nickname,
+			CreateTime:    createTime,
+			UserName:      userName,
+			Email:         email,
+			GroupName:     "组织名称",
+			MainGroupName: "主组织名称",
+			DeptId:        5,
+			OrderNo:       8,
 		})
 	}
 

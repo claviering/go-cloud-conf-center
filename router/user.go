@@ -95,4 +95,38 @@ func UsersRouter(r *gin.RouterGroup, db *sql.DB) {
 			"success": true,
 		})
 	})
+	r.POST("/excel/distinguish", func(c *gin.Context) {
+		type Response struct {
+			Email         string `json:"email"`
+			Nickname      int    `json:"nickname"`
+			DeptIds       string `json:"deptIds"`
+			MainDeptId    string `json:"mainDeptId"`
+			Mobile        string `json:"mobile"`
+			GroupNameList string `json:"groupNameList"`
+			MainGroupName string `json:"mainGroupName"`
+		}
+		var successList []Response
+		for i := 0; i < 24; i++ {
+			data := Response{
+				Email:         "724063132@qq.com",
+				Nickname:      i,
+				DeptIds:       "1",
+				MainDeptId:    "2",
+				Mobile:        "15625076252",
+				GroupNameList: "",
+				MainGroupName: "住组织",
+			}
+			successList = append(successList, data)
+		}
+		c.JSON(200, gin.H{
+			"data": gin.H{
+				"total":       100,
+				"failList":    []int{1, 2, 3},
+				"successList": successList,
+			},
+			"code":    200,
+			"msg":     "success",
+			"success": true,
+		})
+	})
 }
